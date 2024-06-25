@@ -41,11 +41,11 @@ const ImagePreview = ({ images }: Props) => {
       {visibleImages < images.length && (
         <div className="flex justify-center mt-4">
           <button
-            className="px-4 py-2 bg-indigo-600 text-white rounded-md"
+            className="px-4 py-2 bg-pink-500 text-white hover:bg-pink-600 transition-colors duration-200 ease-in-out rounded-md"
             onClick={loadMoreImages}
           >
-            Load More
-          </button>{" "}
+            Зареди още..
+          </button>
         </div>
       )}
     </div>

@@ -1,24 +1,61 @@
-import classNames from "classnames";
-import React, { ComponentPropsWithRef } from "react";
+import React, { useState } from "react";
+import { FaUpload } from "react-icons/fa";
 
-type Props = ComponentPropsWithRef<"input">;
+type Props = React.ComponentPropsWithRef<"input">;
 
 const CustomFileSelector = (props: Props) => {
+  const [dragging, setDragging] = useState(false);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      props.onChange?.({
+        target: {
+          files: e.dataTransfer.files,
+        },
+      } as React.ChangeEvent<HTMLInputElement>);
+      e.dataTransfer.clearData();
+    }
+  };
+
   return (
-    <input
-      {...props}
-      type="file"
-      multiple
-      className={classNames({
-        // Modify the Button shape, spacing, and colors using the `file`: directive
-        // button colors
-        "file:bg-violet-50 file:text-violet-500 hover:file:bg-violet-100": true,
-        "file:rounded-lg file:rounded-tr-none file:rounded-br-none": true,
-        "file:px-4 file:py-2 file:mr-4 file:border-none": true,
-        // overall input styling
-        "hover:cursor-pointer border rounded-lg text-gray-400": true,
-      })}
-    />
+    <div
+      className={`flex items-center justify-center border-4 border-dashed rounded-lg p-8 transition-colors duration-200 ease-in-out ${
+        dragging
+          ? "border-soft-coral bg-soft-peach"
+          : "border-pink-500 bg-pink-50"
+      }`}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
+      <label
+        htmlFor="file-upload"
+        className="flex items-center cursor-pointer text-pink-500 hover:text-pink-600"
+      >
+        <FaUpload className="mr-2 text-2xl" />
+        <span className="text-lg text-center">
+          Хвани и постави или просто кликни
+        </span>
+      </label>
+      <input
+        id="file-upload"
+        {...props}
+        type="file"
+        multiple
+        className="hidden"
+      />
+    </div>
   );
 };
 

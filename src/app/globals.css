@@ -17,8 +17,7 @@
 }
 
 body {
-  /* color: rgb(var(--foreground-rgb)); */
-  background-image: url("/background.png");
+  background-image: url("/background-landscape.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -29,5 +28,11 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+@media (max-width: 767px), (orientation: portrait) {
+  body {
+    background-image: url("/background-portrait.png");
   }
 }

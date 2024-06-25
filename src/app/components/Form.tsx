@@ -98,38 +98,42 @@ const FileUploadForm = () => {
   };
 
   return (
-    <form className="w-full" onSubmit={handleSubmit}>
-      <div className="mb-4">
+    <form
+      className="w-full bg-white p-6 rounded-lg shadow-md"
+      onSubmit={handleSubmit}
+    >
+      <div className="mb-6">
         <label
           htmlFor="firstname"
           className="block text-sm font-medium text-gray-700"
         >
-          Firstname
+          Име*:
         </label>
         <input
           type="text"
           id="firstname"
+          autocomplete="off"
           value={firstname}
           onChange={(e) => setFirstname(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
           required
         />
       </div>
-      <div className="mb-4">
+      <div className="mb-6">
         <label
           htmlFor="description"
           className="block text-sm font-medium text-gray-700"
         >
-          Description (optional)
+          Послание:
         </label>
         <textarea
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
         />
       </div>
-      <div className="flex justify-between mb-4">
+      <div className="flex flex-col items-center mb-6">
         <CustomFileSelector
           accept={allFileTypes}
           onChange={handleFileSelected}
@@ -138,13 +142,13 @@ const FileUploadForm = () => {
         <button
           type="submit"
           className={classNames({
-            "bg-violet-50 text-violet-500 hover:bg-violet-100 px-4 py-2 rounded-md":
+            "mt-4 bg-pink-500 text-white hover:bg-pink-600 transition-colors duration-200 ease-in-out px-4 py-2 rounded-md shadow-sm":
               true,
-            "disabled pointer-events-none opacity-40": uploading,
+            "disabled pointer-events-none opacity-50": uploading,
           })}
           disabled={uploading}
         >
-          Upload
+          Изпрати
         </button>
       </div>
       <ImagePreview images={images} />

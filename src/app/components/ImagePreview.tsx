@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+"use client";
+
+import { useState, useEffect, memo } from "react";
 import Image from "next/image";
 
 interface Props {
@@ -32,8 +34,9 @@ const ImagePreview = ({ images }: Props) => {
               src={src}
               alt={images[index].name}
               className="object-cover"
-              layout="fill"
-              loading="lazy" // Lazy loading for images
+              fill
+              loading="lazy"
+              sizes="100vw"
             />
           </div>
         ))}

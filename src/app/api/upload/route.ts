@@ -2,6 +2,16 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
+    const url = new URL(req.url);
+    const queryParams = url.searchParams;
+    const token = queryParams.get("t") as string;
+
+    const validTokens = process.env.VALID_TOKENS?.split(",") || [];
+
+    if (!validTokens.includes(token)) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+
     const formData = await req.formData();
     const formDataEntryValues = Array.from(formData.values());
 
@@ -12,8 +22,6 @@ export async function POST(req: Request) {
       });
     }
 
-    const url = new URL(req.url);
-    const queryParams = url.searchParams;
     const folderName =
       queryParams.get("name") +
       "_" +

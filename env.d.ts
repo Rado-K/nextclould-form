@@ -3,5 +3,6 @@ namespace NodeJS {
     API_USER: string;
     API_PASS: string;
     API_DOMAIN: string;
+    VALID_TOKENS: string;
   }
 }

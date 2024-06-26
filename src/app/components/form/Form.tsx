@@ -1,10 +1,11 @@
 "use client";
 
 import React, { FormEvent, useState } from "react";
-import ImagePreview from "./ImagePreview";
-import CustomFileSelector from "./CustomFileSelector";
 import classNames from "classnames";
 import { HeartLoading } from "../loading";
+import ImagePreview from "./ImagePreview";
+import CustomFileSelector from "./CustomFileSelector";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const fileTypes = {
   images: [
@@ -51,6 +52,11 @@ const allFileTypes = [
 ].join(", ");
 
 const Form = () => {
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const token = searchParams.get("t") as string;
+
   const [images, setImages] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [firstname, setFirstname] = useState<string>("");
@@ -78,6 +84,7 @@ const Form = () => {
     const queryParams = new URLSearchParams({
       name: firstname,
       description,
+      t: token,
     }).toString();
 
     setUploading(true);
@@ -89,6 +96,10 @@ const Form = () => {
 
       if (!response.ok) {
         throw new Error("Failed to upload");
+      }
+
+      if (response.redirected) {
+        router.replace("/");
       }
     } catch (error) {
       console.error("Upload error:", error);

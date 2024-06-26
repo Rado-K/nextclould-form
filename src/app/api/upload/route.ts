@@ -1,4 +1,3 @@
-// app/api/hello/route.ts
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -7,7 +6,10 @@ export async function POST(req: Request) {
     const formDataEntryValues = Array.from(formData.values());
 
     if (!formDataEntryValues || formDataEntryValues.length === 0) {
-      throw new Error("No files provided in the form data.");
+      return NextResponse.json({
+        success: false,
+        message: "No files provided in the form data.",
+      });
     }
 
     const url = new URL(req.url);
@@ -18,10 +20,13 @@ export async function POST(req: Request) {
       (Math.random() + 1).toString(36).substring(6);
 
     if (!folderName) {
-      throw new Error("Folder name is missing in the query parameters.");
+      return NextResponse.json({
+        success: false,
+        message: "Folder name is missing in the query parameters.",
+      });
     }
 
-    const baseURL = process.env.API_DOMAIN + process.env.API_USER;
+    const baseURL = process.env.API_DOMAIN + process.env.API_USER + "/";
     const authHeader = {
       Authorization:
         "Basic " +
@@ -30,35 +35,40 @@ export async function POST(req: Request) {
         ),
     };
 
+    const urlwithFolder = `${baseURL}${folderName}/`;
+
     // Create the directory
-    const dirResponse = await fetch(`${baseURL}${folderName}/`, {
+    const dirResponse = await fetch(urlwithFolder, {
       method: "MKCOL",
       headers: authHeader,
     });
 
     if (!dirResponse.ok) {
-      throw new Error(`Failed to create directory: ${dirResponse.statusText}`);
+      return NextResponse.json({
+        success: false,
+        message: `Failed to create directory: ${dirResponse.statusText}`,
+      });
     }
 
     const description = queryParams.get("description");
 
-    // Create the description file
-    const descResponse = await fetch(
-      `${baseURL}${folderName}/1description.txt`,
-      {
+    if (description) {
+      // Create the description file
+      const descResponse = await fetch(`${urlwithFolder}1description.txt`, {
         method: "PUT",
         headers: {
           ...authHeader,
           "Content-Type": "text/plain",
         },
         body: description,
-      },
-    );
+      });
 
-    if (!descResponse.ok) {
-      throw new Error(
-        `Failed to create description file: ${descResponse.statusText}`,
-      );
+      if (!descResponse.ok) {
+        return NextResponse.json({
+          success: false,
+          message: `Failed to create description file: ${descResponse.statusText}`,
+        });
+      }
     }
 
     const uploadFile = async (formDataEntryValue: FormDataEntryValue) => {
@@ -67,7 +77,7 @@ export async function POST(req: Request) {
         "arrayBuffer" in formDataEntryValue
       ) {
         const uploadResponse = await fetch(
-          `${baseURL}${folderName}/${formDataEntryValue.name}`,
+          `${urlwithFolder}${formDataEntryValue.name}`,
           {
             method: "PUT",
             headers: {
@@ -79,18 +89,23 @@ export async function POST(req: Request) {
         );
 
         if (!uploadResponse.ok) {
-          throw new Error(
-            `Failed to upload file ${formDataEntryValue.name}: ${uploadResponse.statusText}`,
-          );
+          return NextResponse.json({
+            success: false,
+            message: `Failed to upload file ${formDataEntryValue.name}: ${uploadResponse.statusText}`,
+          });
         }
 
         return uploadResponse;
       } else {
-        throw new Error("Invalid file entry in form data.");
+        return NextResponse.json({
+          success: false,
+          message: "Invalid file entry in form data.",
+        });
       }
     };
 
     const uploadPromises = formDataEntryValues.map(uploadFile);
+
     await Promise.all(uploadPromises);
 
     return NextResponse.json({ success: true });

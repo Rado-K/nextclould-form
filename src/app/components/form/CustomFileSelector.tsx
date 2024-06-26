@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { FaUpload } from "react-icons/fa";
-import { HeartLoading } from "../loading";
 
 type Props = React.ComponentPropsWithRef<"input">;
 
@@ -46,9 +44,8 @@ const CustomFileSelector = (props: Props) => {
         htmlFor="file-upload"
         className="flex items-center cursor-pointer text-pink-500 hover:text-pink-600"
       >
-        <FaUpload className="mr-2 text-2xl" />
         <span className="text-lg text-center">
-          Хвани и постави или просто кликни
+          Хвани и постави или просто кликни.
         </span>
       </label>
       <input

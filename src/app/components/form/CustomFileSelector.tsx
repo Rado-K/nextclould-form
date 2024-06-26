@@ -45,7 +45,7 @@ const CustomFileSelector = (props: Props) => {
         className="flex items-center cursor-pointer text-pink-500 hover:text-pink-600"
       >
         <span className="text-lg text-center">
-          Хвани и постави или просто кликни.
+          Хвани и постави, или просто кликни.
         </span>
       </label>
       <input

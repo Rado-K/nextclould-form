@@ -1,5 +1,6 @@
 import Head from "next/head";
-import Form from "./components/Form";
+import { Form } from "./components";
+import { HeartLoading } from "./components/loading";
 
 export default function Home() {
   return (

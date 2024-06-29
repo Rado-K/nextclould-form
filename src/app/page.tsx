@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import Head from "next/head";
 import { Logo, Form } from "./components";
 
@@ -14,7 +15,9 @@ export default function Home() {
           <Logo />
         </header>
         <main className="flex flex-col items-center justify-center w-full max-w-md bg-white bg-opacity-80 p-2 md:p-8 rounded-lg shadow-lg">
-          <Form />
+          <Suspense>
+            <Form />
+          </Suspense>
         </main>
       </div>
     </>
